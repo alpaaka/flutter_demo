@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_app/cat_image.dart';
+import 'package:flutter_demo_app/cats_list.dart';
 import 'package:flutter_demo_app/cats_list_repository_impl.dart';
 
 class GalleryPage extends StatefulWidget {
@@ -26,12 +27,12 @@ class _GalleryPageState extends State<GalleryPage> {
           future: catsRepository.fetchData(15),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Image.network(snapshot.data.first.url);
+              return CatsImagesList(
+                initialState: snapshot.data
+              );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-
-            // By default, show a loading spinner
             return CircularProgressIndicator();
           },
         ),
