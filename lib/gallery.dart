@@ -1,41 +1,44 @@
-import 'dart:async';
-import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_demo_app/cats_list.dart';
 
-import 'package:http/http.dart' as http;
+class GalleryPage extends StatefulWidget {
+  GalleryPage({Key key, this.title}) : super(key: key);
 
-Map<String, String> requestHeaders = {
-  "x-api-key": "48117d48-711d-49f0-9a5d-05dd10af831f"
-};
+  final String title;
 
-Future<List<CatImage>> fetchData() async {
-  final response = await http.get(
-      'https://api.thecatapi.com/v1/images/search?limit=10',
-      headers: requestHeaders
-  );
-
-  if (response.statusCode == 200) {
-    final parsed = List<Map<String, dynamic>>.from(json.decode(response.body));
-    return parsed.map<CatImage>((json) => CatImage.fromJson(json)).toList();
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load post');
-  }
+  @override
+  _GalleryPageState createState() => _GalleryPageState();
 }
 
-class CatImage {
-  final String id;
-  final String url;
-  final int width;
-  final int height;
+class _GalleryPageState extends State<GalleryPage> {
+  Future<List<CatImage>> images = fetchData();
 
-  CatImage({this.id, this.url, this.width, this.height});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: FutureBuilder<List<CatImage>>(
+          future: images,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data.first.url);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
 
-  factory CatImage.fromJson(Map<String, dynamic> json) {
-    return CatImage(
-      id: json['id'],
-      url: json['url'],
-      width: json['width'],
-      height: json['height'],
+            // By default, show a loading spinner
+            return CircularProgressIndicator();
+          },
+        ),
+      ),
     );
   }
 }
