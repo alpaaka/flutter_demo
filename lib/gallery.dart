@@ -24,7 +24,7 @@ class _GalleryPageState extends State<GalleryPage> {
       ),
       body: Center(
         child: FutureBuilder<List<CatImage>>(
-          future: catsRepository.fetchData(15),
+          future: catsRepository.fetchData(0),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return CatsImagesList(

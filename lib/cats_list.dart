@@ -26,7 +26,10 @@ class _CatsImagesListState extends State<CatsImagesList> {
     return new ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
-        return Image.network(list[index].url);
+        final CatImage catImage = list[index];
+        return Image.network(
+            catImage.url
+        );
       },
     );
   }
