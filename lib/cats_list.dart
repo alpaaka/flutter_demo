@@ -75,30 +75,15 @@ class _CatsImagesListState extends State<CatsImagesList> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Row(
-              children: <Widget>[
-                new ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    final CatImage catImage = list[index];
-                    return GestureDetector(
-                        child: Hero(
-                            tag: catImage.id,
-                            child: Image.network(catImage.url)),
-                        onTap: () => this._onTapped(context, catImage));
-                  },
-                  controller: _controller,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return new ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+        final CatImage catImage = list[index];
+        return GestureDetector(
+            child: Hero(tag: catImage.id, child: Image.network(catImage.url)),
+            onTap: () => this._onTapped(context, catImage));
+      },
+      controller: _controller,
     );
   }
 }
