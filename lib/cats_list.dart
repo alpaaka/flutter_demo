@@ -59,10 +59,12 @@ class _CatsImagesListState extends State<CatsImagesList> {
        *
        */
       if (list.length >= (Constants.itemsCount * pageNumber) && !isLoading) {
+        isLoading = true;
         pageNumber++;
         FutureBuilder<List<CatImage>>(
             future: catsRepository.fetchData(pageNumber),
             builder: (context, snapshot) {
+              isLoading = false;
               if (snapshot.hasData) {
                 list.addAll(snapshot.data);
               }
