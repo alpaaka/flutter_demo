@@ -14,6 +14,7 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
+
   CatsRepositoryImpl catsRepository = CatsRepositoryImpl();
 
   @override
