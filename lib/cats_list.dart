@@ -25,6 +25,7 @@ class _CatsImagesListState extends State<CatsImagesList> {
   @override
   void initState() {
     list.addAll(widget.initialState);
+
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
@@ -39,36 +40,13 @@ class _CatsImagesListState extends State<CatsImagesList> {
 
   _scrollListener() {
     if (_controller.position.maxScrollExtent == _controller.offset) {
-      /***
-       * we need to get new data on page scroll end but if the last
-       * time when data is returned, its count should be Constants.itemsCount' (10)
-       *
-       * So we calculate every time
-       *
-       * productList.length >= (Constants.itemsCount*pageNumber)
-       *
-       * list must contain the products == Constants.itemsCount if the page number is 1
-       * but if page number is increased then we need to calculate the total
-       * number of products we have received till now example:
-       * first time on page scroll if last count of productList is Constants.itemsCount
-       * then increase the page number and get new data.
-       * Now page number is 2, now we have to check the count of the productList
-       * if it is==Constants.itemsCount*pageNumber (20 in current case) then we have
-       * to get data again, if not then we assume, server has not more data then
-       * we currently have.
-       *
-       */
       if (list.length >= (Constants.itemsCount * pageNumber) && !isLoading) {
         isLoading = true;
         pageNumber++;
-        FutureBuilder<List<CatImage>>(
-            future: catsRepository.fetchData(pageNumber),
-            builder: (context, snapshot) {
+        catsRepository.fetchData(pageNumber).then((result) => this.setState(() {
               isLoading = false;
-              if (snapshot.hasData) {
-                list.addAll(snapshot.data);
-              }
-            });
+              list.addAll(result);
+            }));
       }
     }
   }
